@@ -30,7 +30,7 @@ def search_pdf_data(search_url, project_id, env_id, query, limit=5, offset=0):
 
     # Headers with projectId and environmentId
     headers = {
-        'projectId': project_id
+        'projectId': project_id,
         'environmentId': env_id
     }
     
