@@ -168,7 +168,7 @@ def main():
 
             # Make the API request to search PDF data
             context = search_pdf_data(search_url, projectId, environmentId, prompt)
-            st.write(context)
+            # st.write(context)
 
             if context:
                 # Generate a response using the AI model
