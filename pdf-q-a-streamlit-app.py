@@ -136,6 +136,7 @@ def main():
                 f.write(docs.getbuffer())
                 with st.spinner('Processing'):
                     data = SimpleDirectoryReader(".").load_data()
+                    st.write(data)
                     text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, 
                                                                    chunk_overlap=20)
                     split_docs = text_splitter.split_documents(data)
