@@ -4,6 +4,7 @@ import requests
 import streamlit as st
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from llama_index.core import SimpleDirectoryReader
 import google.generativeai as genai
 # from llama_index import ServiceContext
 # from llama_index import set_global_service_context
