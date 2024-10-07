@@ -19,7 +19,7 @@ def create_index(post_url, project_id, env_id, input_text):
 
 
 def generate_index_entry(index_creation_url, projectId, environmentId, documents):
-    st.write(documents)
+    # st.write(documents)
     for doc in documents:
         if doc.page_content:
             create_index(index_creation_url, 
@@ -156,7 +156,7 @@ def main():
                     st.session_state.activate_chat = True
                     os.unlink(tmp_file_path)
 
-    if st.session_state.activate_chat == True:
+    if st.session_state.activate_chat == True or st.button('Ask'):
         if prompt := st.chat_input("Ask your question from the PDF?"):
             with st.chat_message("user", avatar='👨🏻'):
                 st.markdown(prompt)
