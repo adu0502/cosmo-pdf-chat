@@ -5,8 +5,8 @@ import streamlit as st
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import google.generativeai as genai
-from llama_index import ServiceContext
-from llama_index import set_global_service_context
+# from llama_index import ServiceContext
+# from llama_index import set_global_service_context
 from copy import deepcopy
 from tempfile import NamedTemporaryFile
 
@@ -124,14 +124,14 @@ def main():
     genai.configure(api_key = st.secrets['GOOGLE_AI_STUDIO_TOKEN'])
 
 
-    service_context = ServiceContext.from_defaults(
-        projectId=projectId,
-        environmentId=environmentId,
-        index_creation_url=index_creation_url,
-        search_url=search_url,
-    )
+    # service_context = ServiceContext.from_defaults(
+    #     projectId=projectId,
+    #     environmentId=environmentId,
+    #     index_creation_url=index_creation_url,
+    #     search_url=search_url,
+    # )
 
-    set_global_service_context(service_context)
+    # set_global_service_context(service_context)
 
     with st.sidebar:
         st.subheader('Upload Your PDF File')
