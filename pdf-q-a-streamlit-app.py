@@ -6,8 +6,6 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from llama_index.core import SimpleDirectoryReader
 import google.generativeai as genai
-# from llama_index import ServiceContext
-# from llama_index import set_global_service_context
 from copy import deepcopy
 from tempfile import NamedTemporaryFile
 
@@ -20,9 +18,13 @@ def create_index(post_url, project_id, env_id, input_text):
 
 
 def generate_index_entry(index_creation_url, projectId, environmentId, documents):
+    st.write(documents)
     for doc in documents:
         if doc.page_content:
-            create_index(index_creation_url, projectId, environmentId, str(doc.page_content))
+            create_index(index_creation_url, 
+                         projectId, 
+                         environmentId, 
+                         str(doc.page_content))
     return 1
 
 
@@ -123,16 +125,6 @@ def main():
     search_url = st.secrets["search_url"]
 
     genai.configure(api_key = st.secrets['GOOGLE_AI_STUDIO_TOKEN'])
-
-
-    # service_context = ServiceContext.from_defaults(
-    #     projectId=projectId,
-    #     environmentId=environmentId,
-    #     index_creation_url=index_creation_url,
-    #     search_url=search_url,
-    # )
-
-    # set_global_service_context(service_context)
 
     with st.sidebar:
         st.subheader('Upload Your PDF File')
