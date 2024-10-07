@@ -8,6 +8,7 @@ from llama_index.core import SimpleDirectoryReader
 import google.generativeai as genai
 from copy import deepcopy
 from tempfile import NamedTemporaryFile
+import tempfile
 
 def create_index(post_url, project_id, env_id, input_text):
 
@@ -128,27 +129,32 @@ def main():
 
     with st.sidebar:
         st.subheader('Upload Your PDF File')
-        docs = st.file_uploader('⬆️ Upload your PDF & Click to process',
-                                accept_multiple_files = False, 
-                                type=['pdf'])
-        if st.button('Process'):
-            with NamedTemporaryFile(dir='.', suffix='.pdf') as f:
-                f.write(docs.getbuffer())
-                with st.spinner('Processing'):
-                    data = SimpleDirectoryReader(".").load_data()
-                    st.write(data)
-                    text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, 
-                                                                   chunk_overlap=20)
-                    split_docs = text_splitter.split_documents(data)
-                    st.write(split_docs)
-                    query_engine = generate_index_entry(index_creation_url, 
-                                                        projectId, 
-                                                        environmentId, 
-                                                        split_docs)
+        uploaded_file = st.file_uploader('⬆️ Upload your PDF & Click to process',
+                                         accept_multiple_files = False, 
+                                         type=['pdf'])
+        if uploaded_file is not None:
+            if st.button('Process'):
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+                    tmp_file.write(uploaded_file.getvalue())
+                    tmp_file_path = tmp_file.name
 
-                    if "query_engine" not in st.session_state:
-                        st.session_state.query_engine = query_engine
+                # Load the PDF
+                loader = PyPDFLoader(tmp_file_path)
+                data = loader.load()
+
+                # Split PDF into documents
+                text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
+                split_docs = text_splitter.split_documents(data)
+\
+                query_engine = generate_index_entry(index_creation_url, 
+                                                    projectId, 
+                                                    environmentId, 
+                                                    split_docs)
+
+                if "query_engine" not in st.session_state:
+                    st.session_state.query_engine = query_engine
                     st.session_state.activate_chat = True
+                    os.unlink(tmp_file_path)
 
     if st.session_state.activate_chat == True:
         if prompt := st.chat_input("Ask your question from the PDF?"):
