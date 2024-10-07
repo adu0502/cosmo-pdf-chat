@@ -151,7 +151,7 @@ def main():
                     query_engine = generate_index_entry(index_creation_url, 
                                                         projectId, 
                                                         environmentId, 
-                                                        documents)
+                                                        docs)
 
                     if "query_engine" not in st.session_state:
                         st.session_state.query_engine = query_engine
