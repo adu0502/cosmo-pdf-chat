@@ -106,7 +106,10 @@ def main():
     index_placeholder = None
     st.set_page_config(page_title = "CosmoGemini", page_icon="☁️")
     st.header('☁️ Chat with your PDFs using Cosmocloud, Google Gemini Pro & MongoDB Atlas')
-    
+
+    if "vectordb_empty" not in st.session_state:
+        st.session_state.vectordb_empty = False
+        
     if "conversation" not in st.session_state:
         st.session_state.conversation = None
 
@@ -129,6 +132,7 @@ def main():
 
     with st.sidebar:
         st.subheader('Upload Your PDF File')
+        st.session_state.vectordb_empty = True
         uploaded_file = st.file_uploader('⬆️ Upload your PDF & Click to process',
                                          accept_multiple_files = False, 
                                          type=['pdf'])
@@ -156,7 +160,7 @@ def main():
                     st.session_state.activate_chat = True
                     os.unlink(tmp_file_path)
 
-    if st.session_state.activate_chat == True or st.button('Ask'):
+    if st.session_state.activate_chat == True or st.session_state.vectordb_empty == True:
         if prompt := st.chat_input("Ask your question from the PDF?"):
             with st.chat_message("user", avatar='👨🏻'):
                 st.markdown(prompt)
