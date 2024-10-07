@@ -138,12 +138,12 @@ def main():
                     data = SimpleDirectoryReader(".").load_data()
                     text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, 
                                                                    chunk_overlap=20)
-                    docs = text_splitter.split_documents(data)
-
+                    split_docs = text_splitter.split_documents(data)
+                    st.write(split_docs)
                     query_engine = generate_index_entry(index_creation_url, 
                                                         projectId, 
                                                         environmentId, 
-                                                        docs)
+                                                        split_docs)
 
                     if "query_engine" not in st.session_state:
                         st.session_state.query_engine = query_engine
